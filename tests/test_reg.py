@@ -1,12 +1,13 @@
 from objective_functions.regularization import *
 import torch
+from tests.common import *
 
-def test_perturbation():
+def test_perturbation(set_seeds):
     pt = Perturbation()
     assert pt.perturb_tensor(torch.ones(10),1,True).shape == (10,)
     assert pt.get_expanded_logits(torch.ones((10,10)),10).shape == (100,10)
 
-def test_regularization():
+def test_regularization(set_seeds):
     rg = Regularization()
     assert rg.get_batch_statistics(torch.ones(10),10).shape == ()
     assert rg.get_batch_statistics(torch.ones(10),10, 'dif_ent').shape == ()

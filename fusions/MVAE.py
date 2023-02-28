@@ -32,7 +32,7 @@ class ProductOfExperts(nn.Module):
         Returns:
             torch.Tensor, torch.Tensor: Output of PoE layer.
         """
-        mu, logvar = _prior_expert(self.size, len(mus[0]))
+        mu, logvar = _prior_expert(self.size, len(mus[0]), device=mus[0].device)
         for i in range(len(mus)):
             
             mu = torch.cat((mu, mus[i].unsqueeze(0)), dim=0)
@@ -77,7 +77,7 @@ class ProductOfExperts_Zipped(nn.Module):
         """
         mus = [i[0] for i in zipped]
         logvars = [i[1] for i in zipped]
-        mu, logvar = _prior_expert(self.size, len(mus[0]))
+        mu, logvar = _prior_expert(self.size, len(mus[0]), device=mus[0].device)
         for i in range(len(mus)):
             mu = torch.cat((mu, mus[i].unsqueeze(0)), dim=0)
             logvar = torch.cat((logvar, logvars[i].unsqueeze(0)), dim=0)
@@ -90,7 +90,7 @@ class ProductOfExperts_Zipped(nn.Module):
         return pd_mu, pd_logvar
 
 
-def _prior_expert(size, batch_size):
+def _prior_expert(size, batch_size, device=None):
     """
     Universal prior expert. Here we use a spherical.
     
@@ -99,4 +99,4 @@ def _prior_expert(size, batch_size):
     size = (size[0], batch_size, size[2])
     mu = Variable(torch.zeros(size))
     logvar = Variable(torch.log(torch.ones(size)))
-    return mu.to(torch.device("cuda:0" if torch.cuda.is_available() else "cpu")), logvar.to(torch.device("cuda:0" if torch.cuda.is_available() else "cpu"))
+    return mu.to(device), logvar.to(device)

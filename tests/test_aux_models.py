@@ -1,6 +1,7 @@
 from utils.aux_models import *
+from tests.common import *
 
-def test_CellBlock():
+def test_CellBlock(set_seeds):
     """Test if CellBlock preserves dimensions."""
     class args:
         planes = 3
@@ -12,13 +13,13 @@ def test_CellBlock():
         out = cb(input_t, input_t)
         assert out.shape == (1,3,128,128)
 
-def test_Id():
+def test_Id(set_seeds):
     """"""
     id = Identity()
     assert id(torch.zeros((3,3))).shape == (3,3)
 
 
-def test_3():
+def test_3(set_seeds):
     """"""
     fn = Tensor1DLateralPadding(1)
     assert fn(torch.zeros((3,3))).shape == (3,4)
@@ -37,5 +38,5 @@ def test_3():
     fn = FactorizedReduction(4,4)
     assert fn(torch.zeros(1,4,4,4)).shape == (1,4,2,2)
 
-def test_Cell():
+def test_Cell(set_seeds):
     pass

@@ -1,11 +1,12 @@
 import torch
 import numpy as np
-from contextlib import redirect_stderr, redirect_stdout
-from io import StringIO
-from tests.common import *
+import io
+import contextlib
 
 
 
+
+    
 def sl1():
     from unimodals.common_models import GRU, MLP, Sequential, Identity  # noqa
     from training_structures.Supervised_Learning import train, test  # noqa
@@ -29,12 +30,13 @@ def sl1():
     
 def test_sl1(set_seeds):
     """Test SL1."""
-    f = StringIO()
-    with redirect_stdout(f):
+    f = io.StringIO()
+    with contextlib.redirect_stderr(f):
         sl1()
-    assert f.getvalue() == '', ('acc' in f.getvalue())
+    assert f.getvalue() == '', f.getvalue()
 
-def test_sl2(set_seeds):
+
+def test_sl2():
   from private_test_scripts.all_in_one import all_in_one_train # noqa
   from training_structures.gradient_blend import train, test # noqa
   from unimodals.common_models import GRU, MLP, Transformer # noqa
@@ -69,7 +71,7 @@ def test_sl2(set_seeds):
   model = torch.load('mosi_best_gb.pt')
   test(model=model, test_dataloaders_all={'fake':[dl]}, dataset='mosi', auprc=True)
 
-def test_sl3(set_seeds):
+def test_sl3():
   from unimodals.common_models import GRU, MLP, Sequential, Identity  # noqa
   from training_structures.unimodal import train, test  # noqa
   from fusions.common_fusions import ConcatEarly  # noqa
@@ -97,7 +99,7 @@ def test_sl3(set_seeds):
       task="posneg-classification", modalnum=modality_num, no_robust=False)
 
 
-def test_sl4(set_seeds):
+def test_sl4():
   from private_test_scripts.all_in_one import all_in_one_train # noqa
   from training_structures.MCTN_Level2 import train, test # noqa
   from unimodals.common_models import GRU, MLP # noqa
@@ -123,7 +125,7 @@ def test_sl4(set_seeds):
   allmodules = [encoder0, decoder0, encoder1, decoder1, reg_encoder, head]
 
 
-  def trainprocess(set_seeds):
+  def trainprocess():
       train(
           dl_faked, dl_faked,
           encoder0, decoder0, encoder1, decoder1,
@@ -144,7 +146,7 @@ def test_sl4(set_seeds):
   test(model, dl_faked, 'mosi', no_robust=True)
 
 
-def test_sl5(set_seeds):
+def test_sl5():
   from unimodals.common_models import LeNet, MLP, Constant
   import utils.surrogate as surr
   from fusions.common_fusions import Concat
@@ -160,7 +162,7 @@ def test_sl5(set_seeds):
   
   test(model, dl_faked, 'test', no_robust=True)
 
-def test_sl6(set_seeds):
+def test_sl6():
   
   from unimodals.MVAE import TSEncoder, TSDecoder # noqa
   from utils.helper_modules import Sequential2 # noqa

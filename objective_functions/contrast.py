@@ -251,7 +251,7 @@ class NCESoftmaxLoss(nn.Module):
         """
         bsz = x.shape[0]
         x = x.squeeze()
-        label = torch.zeros([bsz]).to(torch.device("cuda:0" if torch.cuda.is_available() else "cpu")).long()
+        label = torch.zeros([bsz]).to(x.device).long()
         loss = self.criterion(x, label)
         return loss
 

@@ -124,6 +124,7 @@ class MULTModel(nn.Module):
         else:
             out = torch.cat(last_hs, dim=1)
 
+
         # A residual block
         out_proj = self.proj2(
             F.dropout(F.relu(self.proj1(out)), p=self.out_dropout, training=self.training))
