@@ -6,7 +6,7 @@ from tests.common import *
 
 
 
-def sl1():
+def integration_runner_one():
     from unimodals.common_models import GRU, MLP, Sequential, Identity  # noqa
     from training_structures.Supervised_Learning import train, test  # noqa
     from fusions.common_fusions import ConcatEarly  # noqa
@@ -27,11 +27,11 @@ def sl1():
     test(model, {'key':[dl]}, 'affect', is_packed=False,
      criterion=torch.nn.L1Loss(), task="posneg-classification", auprc=False, no_robust=False)
     
-def test_sl1(set_seeds):
+def test_integration_one(set_seeds):
     """Test SL1."""
     f = StringIO()
     with redirect_stdout(f):
-        sl1()
+        integration_runner_one()
     stdout = f.getvalue()
     lines = stdout.splitlines()
     lines = [[elem.strip() for elem in line.split(":")] for line in lines]
@@ -138,7 +138,7 @@ def test_sl4(set_seeds):
   allmodules = [encoder0, decoder0, encoder1, decoder1, reg_encoder, head]
 
 
-  def trainprocess(set_seeds):
+  def trainprocess():
       train(
           dl_faked, dl_faked,
           encoder0, decoder0, encoder1, decoder1,
