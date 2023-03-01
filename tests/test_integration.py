@@ -32,7 +32,22 @@ def test_sl1(set_seeds):
     f = StringIO()
     with redirect_stdout(f):
         sl1()
-    assert f.getvalue() == '', ('acc' in f.getvalue())
+    stdout = f.getvalue()
+    lines = stdout.splitlines()
+    lines = [[elem.strip() for elem in line.split(":")] for line in lines]
+    for output_line in lines:
+      if len(output_line) != 2:
+          continue 
+      a,b = output_line
+      tests_hit = 0
+      print(a,b, sep="|")
+      if a == "Training Params":
+         tests_hit += 1
+         assert b == "1680897"
+      if a == "Final Train Loss":
+         tests_hit += 1
+         assert np.isclose(float(b), 0.5, atol=0.1)
+    assert tests_hit > 0
 
 def test_sl2(set_seeds):
   from private_test_scripts.all_in_one import all_in_one_train # noqa
